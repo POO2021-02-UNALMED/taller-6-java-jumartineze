@@ -6,13 +6,10 @@ import java.util.Collections;
 public class Fabricante {
 	private String nombre;
 	private Pais pais;
-	private static ArrayList<Fabricante> fabricantes = new ArrayList<Fabricante>();
-	protected int vendidos;
 	
 	public Fabricante(String nombre, Pais pais) {
 		this.nombre = nombre;
 		this.pais = pais;
-		fabricantes.add(this);
 	}
 	
 	public String getNombre() {return nombre;}
@@ -21,8 +18,28 @@ public class Fabricante {
 	public Pais getPais() {return pais;}
 	public void setPais(Pais pais) {this.pais = pais;}
 	
+	private static Fabricante mayorVentas(ArrayList<Fabricante> fabricantes) {
+		ArrayList<Integer> rep = new ArrayList<Integer>(); 
+		ArrayList<Fabricante> repP = new ArrayList<Fabricante>();
+		
+		for (int i=0; i<fabricantes.size(); i++) {
+			int count = 0;
+			if (repP.contains(fabricantes.get(i))==false) {
+				repP.add(fabricantes.get(i));
+				for (int e=0; e<fabricantes.size(); e++) {
+					if (fabricantes.get(i) == fabricantes.get(e)) {
+						count++;
+					}
+				}
+			}
+			rep.add(count);
+		}
+
+		int max = Collections.max(rep);
+		return repP.get(rep.indexOf(max));
+	}
+	
 	public static Fabricante fabricaMayorVentas() {
-		return Collections.max(fabricantes, 
-				(x,y) -> x.vendidos - y.vendidos);
+		return mayorVentas(Vehiculo.fabricantes);
 	}
 }
